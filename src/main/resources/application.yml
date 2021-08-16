@@ -1,0 +1,50 @@
+micronaut:
+  application:
+    name: microTestApi
+  server:
+    port: 8081
+  security:
+    authentication: bearer
+    endpoints:
+      login:
+        enabled: true
+      oauth:
+        enabled: true
+    token:
+      jwt:
+        generator:
+          access-token:
+            expiration: 3600
+          refresh-token:
+            secret: '"${JWT_GENERATOR_SIGNATURE_SECRET:pleaseChangeThisSecretForANewOne}"'
+        signatures:
+          secret:
+            generator:
+              secret: '"${JWT_GENERATOR_SIGNATURE_SECRET:pleaseChangeThisSecretForANewOne}"'
+
+jackson:
+  bean-introspection-module: true
+
+datasources:
+  default:
+    url: jdbc:postgresql://localhost:5432/micronaut
+    driverClassName: org.postgresql.Driver
+    username: postgres
+    password: 'admin'
+    dialect: POSTGRES
+
+jpa:
+  default:
+    properties:
+      hibernate:
+        bytecode:
+          provider: none
+        hbm2ddl:
+          auto: validate
+        show_sql: false
+
+liquibase:
+  #enabled: true
+  datasources:
+    default:
+      change-log: classpath:db/liquibase-changelog.xml
